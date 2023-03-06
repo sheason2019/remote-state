@@ -1,0 +1,11 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "composite": true,
+    "jsx": "preserve"
+  },
+  "exclude": ["dist/**/*", "esm/**/*"]
+}

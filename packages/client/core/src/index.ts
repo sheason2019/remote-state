@@ -57,3 +57,7 @@ export class RemoteStore {
     this.socket?.emit("update", atom.key, atom.value);
   }
 }
+
+export { RemoteAtom };
+
+export default RemoteStore;

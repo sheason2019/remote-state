@@ -2,6 +2,12 @@ lockfileVersion: 5.4
 
 importers:
 
+  .:
+    specifiers:
+      typescript: ^4.9.5
+    devDependencies:
+      typescript: 4.9.5
+
   packages/client/core:
     specifiers:
       '@remote-state/types': workspace:*
@@ -10,6 +16,17 @@ importers:
       '@remote-state/types': link:../../common/types
       socket.io-client: 4.6.1
 
+  packages/client/react:
+    specifiers:
+      '@remote-state/client-core': workspace:*
+      '@types/react': ^18.0.27
+      react: ^18.2.0
+    dependencies:
+      '@remote-state/client-core': link:../core
+    devDependencies:
+      '@types/react': 18.0.28
+      react: 18.2.0
+
   packages/common/types:
     specifiers: {}
 
@@ -17,12 +34,9 @@ importers:
     specifiers:
       '@remote-state/types': workspace:*
       socket.io: ^4.6.1
-      typescript: ^4.9.5
     dependencies:
       '@remote-state/types': link:../../common/types
       socket.io: 4.6.1
-    devDependencies:
-      typescript: 4.9.5
 
   test/fe-test:
     specifiers:
@@ -32,7 +46,6 @@ importers:
       '@vitejs/plugin-react': ^3.1.0
       react: ^18.2.0
       react-dom: ^18.2.0
-      typescript: ^4.9.3
       vite: ^4.1.0
     dependencies:
       '@remote-state/client-core': link:../../packages/client/core
@@ -42,17 +55,13 @@ importers:
       '@types/react': 18.0.28
       '@types/react-dom': 18.0.11
       '@vitejs/plugin-react': 3.1.0_vite@4.1.4
-      typescript: 4.9.5
       vite: 4.1.4
 
   test/node-test:
     specifiers:
       '@remote-state/server': workspace:*
-      typescript: ^4.9.5
     dependencies:
       '@remote-state/server': link:../../packages/server/node
-    devDependencies:
-      typescript: 4.9.5
 
 packages:
 
@@ -812,7 +821,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: false
 
   /lru-cache/5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -899,7 +907,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /resolve/1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
