@@ -2,9 +2,9 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "esm",
+    "module": "CommonJS",
+    "outDir": "dist",
     "composite": true
   },
-  "exclude": ["dist/**/*", "esm/**/*"],
-  "references": [{ "path": "./tsconfig.cjs.json" }]
+  "exclude": ["dist/**/*", "esm/**/*"]
 }

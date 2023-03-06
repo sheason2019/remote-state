@@ -1,8 +1,9 @@
 import { Server as HttpServer } from "http";
 import { EmitEvents, ListenEvents, RemoteAtom } from "@remote-state/types";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 import { Context, IHandler, IRemoteStore, IUserStore } from "./types";
+export * from "./types";
 
 export class RemoteStore implements IRemoteStore {
   private io: Server<ListenEvents, EmitEvents>;
@@ -13,12 +14,10 @@ export class RemoteStore implements IRemoteStore {
     this.io = new Server(srv);
     this.store = new Map();
     this.middlewares = new Map();
-
-    this.addSocketListener();
   }
 
-  syncAtom(atom: RemoteAtom<any>) {
-    this.io.emit("update", atom.key, atom.value);
+  sync<T extends any>(socket: Socket, atom: RemoteAtom<T>, value: T) {
+    socket.emit("update", atom.key, value);
   }
 
   use<T extends any>(atom: RemoteAtom<T>, handler: IHandler<T>) {
@@ -29,7 +28,7 @@ export class RemoteStore implements IRemoteStore {
   }
 
   private addSocketListener() {
-    this.io.on("connection", (socket) => {
+    this.io.of("/remote-state").on("connection", (socket) => {
       console.log("Socket connected, id:", socket.id);
       // 创建UserStore
       this.store.set(socket.id, {
@@ -37,26 +36,37 @@ export class RemoteStore implements IRemoteStore {
         StateMap: new Map(),
         setState: (atom, value) => {
           this.store.get(socket.id)?.StateMap.set(atom.key, value);
+          this.sync(socket, atom, value);
         },
       });
 
+      // TEST: 五秒后设置test/test的值
+      setTimeout(() => {
+        this.store
+          .get(socket.id)
+          ?.setState({ key: "test/test", value: "null" }, "SERVER TEST");
+      }, 5000);
+
       socket.on("update", (key, value) => {
         const middlwares = this.middlewares.get(key) ?? [];
-        const store = this.store.get(key);
+        const store = this.store.get(socket.id);
         if (!store) {
-          throw new Error("Store不存在，atom -> key: " + key);
+          throw new Error("Store不存在，socket.id: " + socket.id);
         }
         const ctx = initContext(key, value, store);
         contextStart(ctx, middlwares);
       });
       socket.on("disconnect", () => {
         console.log("Socket disconnected, id:", socket.id);
+        this.store.delete(socket.id);
       });
     });
   }
 
-  listen(port: number) {
-    this.io.listen(port);
+  listen(...args: Parameters<typeof this.io["listen"]>) {
+    this.addSocketListener();
+
+    this.io.listen(...args);
   }
 }
 

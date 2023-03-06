@@ -1,4 +1,5 @@
 import { RemoteAtom } from "@remote-state/types";
+import { Socket } from "socket.io";
 
 export type SocketID = string;
 
@@ -7,7 +8,7 @@ export interface IRemoteStore {
   middlewares: Map<string, IHandler<any>[]>;
 
   use<T extends any>(atom: RemoteAtom<T>, handler: IHandler<T>): any;
-  syncAtom(atom: RemoteAtom<any>): any;
+  sync<T extends any>(socket: Socket, atom: RemoteAtom<T>, value: T): any;
   listen(port: number): any;
 }
 
@@ -30,3 +31,5 @@ export interface Context<T extends any> {
   abort: () => any;
   _middlewareIndex: number;
 }
+
+export { RemoteAtom };

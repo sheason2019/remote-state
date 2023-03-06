@@ -41,7 +41,7 @@ export class RemoteStore {
     compose.subscribeFn.push(subscribeFn);
   }
 
-  connect(opt: IConnectOptions) {
+  connect(opt?: IConnectOptions) {
     this.socket = io("/remote-state");
     this.socket.on("update", (key, value) => {
       const atom = this.subscribers.get(key);
