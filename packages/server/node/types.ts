@@ -1,8 +1,10 @@
 import { RemoteAtom } from "@remote-state/types";
 
+export type SocketID = string;
+
 export interface IRemoteStore {
   store: Map<string, IUserStore>;
-  middlewares: Map<RemoteAtom<any>, IHandler<any>>;
+  middlewares: Map<string, IHandler<any>[]>;
 
   use<T extends any>(atom: RemoteAtom<T>, handler: IHandler<T>): any;
   syncAtom(atom: RemoteAtom<any>): any;
@@ -10,11 +12,21 @@ export interface IRemoteStore {
 }
 
 export interface IHandler<T extends any> {
-  (userStore: IUserStore, value: T, oldValue: T): Promise<any>;
+  (ctx: Context<T>): Promise<any>;
 }
 
 export interface IUserStore {
   key: string;
-  atomSet: Set<RemoteAtom<any>>;
-  setAtom<T extends any>(atom: RemoteAtom<T>, value: T): any;
+  StateMap: Map<string, any>;
+  setState<T extends any>(atom: RemoteAtom<T>, value: T): any;
+}
+
+export interface Context<T extends any> {
+  store: IUserStore;
+  key: string;
+  value: T;
+  oldValue: T;
+  next: () => Promise<any>;
+  abort: () => any;
+  _middlewareIndex: number;
 }
