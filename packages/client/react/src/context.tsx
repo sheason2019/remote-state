@@ -1,4 +1,10 @@
-import { createContext, FC, PropsWithChildren, useEffect, useState } from "react";
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from "react";
 import { RemoteStore } from "@remote-state/client-core";
 
 export const remoteStoreContext = createContext<RemoteStore | null>(null);
@@ -8,17 +14,37 @@ export const RemoteStoreProvider: FC<PropsWithChildren> = ({ children }) => {
 
   // TODO: 以后使用sharedWorker创建Socket连接
   useEffect(() => {
-    if (!store) {
-      handleCreateStore();
-    }
+    handleCreateStore();
   }, []);
 
   const handleCreateStore = () => {
-    const s = new RemoteStore();
-    s.connect();
-
+    const s = RemoteStoreInstance.get();
     setStore(s);
   };
 
-  return <remoteStoreContext.Provider value={store}>{children}</remoteStoreContext.Provider>;
+  return (
+    <remoteStoreContext.Provider value={store}>
+      {children}
+    </remoteStoreContext.Provider>
+  );
 };
+
+
+export class RemoteStoreInstance {
+  static ins: RemoteStore;
+
+  static get(): RemoteStore {
+    if (!this.ins) {
+      this.init();
+    }
+
+    return this.ins;
+  }
+
+  private static init() {
+    const store = new RemoteStore();
+    store.connect();
+
+    this.ins = store;
+  }
+}

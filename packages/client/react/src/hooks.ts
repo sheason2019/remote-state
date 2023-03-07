@@ -1,14 +1,30 @@
 import { RemoteAtom } from "@remote-state/client-core";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { remoteStoreContext } from "./context";
 
-const useRemoteState = <T extends any>(atom: RemoteAtom<T>) => {
+export const useRemoteState = <T extends any>(
+  atom: RemoteAtom<T>
+): [T, (val: T) => void] => {
   const store = useContext(remoteStoreContext);
 
   const [state, setState] = useState<T>(atom.value);
 
-  // TODO: 完成订阅函数
-  store?.subscribe(atom, (value) => {
-    setState(value);
-  });
+  useEffect(() => {
+    store?.subscribe(atom, (value) => {
+      setState(value);
+    });
+  }, [store]);
+
+  const updateState = useCallback(
+    (value: T) => {
+      setState(value);
+      store?.set(atom, value);
+      store?.sync(atom);
+    },
+    [store]
+  );
+
+  return [state, updateState];
 };
+
+export default useRemoteState;

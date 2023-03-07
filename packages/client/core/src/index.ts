@@ -53,6 +53,10 @@ export class RemoteStore {
     });
   }
 
+  disconnect() {
+    this.socket?.disconnect();
+  }
+
   sync(atom: RemoteAtom<any>) {
     this.socket?.emit("update", atom.key, atom.value);
   }

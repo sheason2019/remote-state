@@ -4,7 +4,7 @@
     "rootDir": "src",
     "outDir": "esm",
     "composite": true,
-    "jsx": "preserve"
+    "jsx": "react-jsx"
   },
   "exclude": ["dist/**/*", "esm/**/*"],
   "references": [{ "path": "./tsconfig.cjs.json" }]

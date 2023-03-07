@@ -1,12 +1,13 @@
-import './App.css'
-import useRemoteState from './hooks/use-remote-state'
+import "./App.css";
+import { RemoteStoreProvider } from "@remote-state/react";
+import TestPage from "./pages/test";
 
 function App() {
-  useRemoteState();
-
   return (
-    <div className="App">TEST PAGE</div>
-  )
+    <RemoteStoreProvider>
+      <TestPage />
+    </RemoteStoreProvider>
+  );
 }
 
-export default App
+export default App;
