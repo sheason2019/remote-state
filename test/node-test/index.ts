@@ -4,7 +4,9 @@ import { testAtom } from "./atoms";
 const store = new RemoteStore();
 
 store.use(testAtom, async (ctx) => {
-  console.log(ctx);
+  store.store.forEach((item, id) => {
+    if (id !== ctx.store.socketid) item.setState(testAtom, ctx.value);
+  });
 });
 
 store.listen(3000);

@@ -17,7 +17,7 @@ export const useRemoteState = <T extends any>(
 
   const updateState = useCallback(
     (value: T) => {
-      setState(value);
+      setState(() => value);
       store?.set(atom, value);
       store?.sync(atom);
     },

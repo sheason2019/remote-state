@@ -17,9 +17,9 @@ export interface IHandler<T extends any> {
 }
 
 export interface IUserStore {
-  key: string;
+  socketid: string;
   StateMap: Map<string, any>;
-  setState<T extends any>(atom: RemoteAtom<T>, value: T): any;
+  setState<T extends any>(atom: RemoteAtom<T>, value: T, sync?: boolean): any;
 }
 
 export interface Context<T extends any> {

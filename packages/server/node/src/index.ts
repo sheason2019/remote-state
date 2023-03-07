@@ -32,26 +32,19 @@ export class RemoteStore implements IRemoteStore {
       console.log("Socket connected, id:", socket.id);
       // 创建UserStore
       this.store.set(socket.id, {
-        key: socket.id,
+        socketid: socket.id,
         StateMap: new Map(),
-        setState: (atom, value) => {
+        setState: (atom, value, sync = true) => {
           this.store.get(socket.id)?.StateMap.set(atom.key, value);
-          this.sync(socket, atom, value);
+          sync && this.sync(socket, atom, value);
         },
       });
-
-      // TEST: 五秒后设置test/test的值
-      setTimeout(() => {
-        this.store
-          .get(socket.id)
-          ?.setState({ key: "test/test", value: "null" }, "SERVER TEST");
-      }, 5000);
 
       socket.on("update", (key, value) => {
         const middlwares = this.middlewares.get(key) ?? [];
         const store = this.store.get(socket.id);
         if (!store) {
-          throw new Error("Store不存在，socket.id: " + socket.id);
+          return console.error("Store不存在，socket.id: " + socket.id);
         }
         const ctx = initContext(key, value, store);
         contextStart(ctx, middlwares);
@@ -124,5 +117,5 @@ const update = (ctx: Context<any>) => {
     key: ctx.key,
     value: ctx.value,
   };
-  ctx.store.setState(fakeAtom, ctx.value);
+  ctx.store.setState(fakeAtom, ctx.value, false);
 };
