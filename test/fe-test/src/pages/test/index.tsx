@@ -16,10 +16,11 @@ const handleCreateConn = () => {
 };
 
 const handleCloseConn = (conn: WebSocket) => {
-  conn.close();
+  setTimeout(() => conn.close(), 400);
 };
 
 const TestPage: FC = () => {
+  const [val, setVal] = useState("");
   const [state, setState] = useState<WebSocket>();
   useEffect(() => {
     const conn = handleCreateConn();
@@ -31,10 +32,15 @@ const TestPage: FC = () => {
     };
   }, []);
 
+  const handleSubmit = () => {
+    state?.send(val);
+  };
+
   return (
     <div>
       TEST PAGE：
-      <input />
+      <input value={val} onChange={(e) => setVal(e.target.value)} />
+      <button onClick={handleSubmit}>Submit</button>
     </div>
   );
 };

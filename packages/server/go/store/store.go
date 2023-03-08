@@ -12,6 +12,7 @@ import (
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
 type RemoteStore struct {
@@ -21,7 +22,9 @@ type RemoteStore struct {
 
 // 生成一个默认的RemoteStore
 func Default() *RemoteStore {
-	store := RemoteStore{}
+	store := RemoteStore{
+		UserStores: map[string]*UserStore{},
+	}
 
 	return &store
 }

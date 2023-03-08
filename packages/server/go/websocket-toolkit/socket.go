@@ -1,4 +1,4 @@
-package store
+package websocket_toolkit
 
 import (
 	"encoding/json"
@@ -21,15 +21,28 @@ var (
 )
 
 type Socket struct {
-	Conn        *websocket.Conn
-	ID          string
-	RemoteStore *RemoteStore
-	Message     chan []byte
+	wsHander      *webScoketHandler
+	disconnFn     func(socket *Socket, code int, text string)
+	dispatcherMap map[string]func(payload string)
+	Conn          *websocket.Conn
+	ID            string
+	Message       chan []byte
 }
 
 type ActionMessage struct {
 	Action  string `json:"action"`
 	Payload string `json:"payload"`
+}
+
+func (s *Socket) OnDisconnect(fn func(*Socket, int, string)) {
+	s.disconnFn = fn
+}
+
+func (s *Socket) OnDispatch(action string, reducer func(payload string)) {
+	if _, exist := s.dispatcherMap[action]; exist {
+		log.Println("Dispatch被重复声明! action:", action, "这一操作会覆盖声明的Dispatch")
+	}
+	s.dispatcherMap[action] = reducer
 }
 
 func (s *Socket) writePump() {
@@ -73,7 +86,6 @@ func (s *Socket) writePump() {
 
 func (s *Socket) readPump() {
 	defer func() {
-		s.RemoteStore.unregistUs(s.ID)
 		s.Conn.Close()
 	}()
 	s.Conn.SetReadLimit(maxMessageSize)
@@ -92,6 +104,12 @@ func (s *Socket) readPump() {
 		if err != nil {
 			log.Println("socket message unmarshal error: %w", err)
 		}
-		log.Println("ActionMessage", am)
+
+		dispatcher, exist := s.dispatcherMap[am.Action]
+		if !exist {
+			log.Println("unhandled action:", am.Action)
+		} else {
+			dispatcher(am.Payload)
+		}
 	}
 }
