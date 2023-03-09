@@ -30,11 +30,11 @@ type Socket struct {
 }
 
 type ActionMessage struct {
-	Action  string `json:"action"`
-	Payload string `json:"payload"`
+	Type    string `json:"type"`
+	Payload any    `json:"payload"`
 }
 
-func (s *Socket) OnDisconnect(fn func(*Socket, int, string)) {
+func (s *Socket) OnDisconnect(fn func(s *Socket, code int, text string)) {
 	s.disconnFn = fn
 }
 
@@ -102,14 +102,19 @@ func (s *Socket) readPump() {
 		var am ActionMessage
 		err = json.Unmarshal(message, &am)
 		if err != nil {
-			log.Println("socket message unmarshal error: %w", err)
+			log.Println("socket message unmarshal error:", err)
 		}
 
-		dispatcher, exist := s.dispatcherMap[am.Action]
+		payloadBytes, err := json.Marshal(am.Payload)
+		if err != nil {
+			log.Println("payload stringify error:", err)
+		}
+
+		dispatcher, exist := s.dispatcherMap[am.Type]
 		if !exist {
-			log.Println("unhandled action:", am.Action)
+			log.Println("unhandled action:", am.Type)
 		} else {
-			dispatcher(am.Payload)
+			dispatcher(string(payloadBytes))
 		}
 	}
 }

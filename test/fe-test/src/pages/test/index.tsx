@@ -39,7 +39,7 @@ const TestPage: FC = () => {
   return (
     <div>
       TEST PAGE：
-      <input value={val} onChange={(e) => setVal(e.target.value)} />
+      <textarea value={val} onChange={(e) => setVal(e.target.value)} />
       <button onClick={handleSubmit}>Submit</button>
     </div>
   );
