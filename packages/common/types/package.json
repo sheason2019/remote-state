@@ -1,5 +1,5 @@
 {
-  "name": "@remote-state/types",
+  "name": "@remote-store/types",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
