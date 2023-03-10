@@ -1,4 +1,4 @@
-import { WebSocketToolkit } from ".";
+import { WebSocketToolkit } from "./ws-toolkit";
 import { Action, ActionHandler } from "./types";
 
 export interface ConnectInfo {

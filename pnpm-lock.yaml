@@ -12,9 +12,11 @@ importers:
     specifiers:
       '@remote-state/types': workspace:*
       socket.io-client: ^4.6.1
+      websocket-toolkit: workspace:^1.0.0
     dependencies:
       '@remote-state/types': link:../../common/types
       socket.io-client: 4.6.1
+      websocket-toolkit: link:../websocket-toolkit
 
   packages/client/react:
     specifiers:
@@ -40,6 +42,7 @@ importers:
 
   test/fe-test:
     specifiers:
+      '@remote-state/client-core': workspace:^1.0.0
       '@remote-state/react': workspace:*
       '@types/react': ^18.0.27
       '@types/react-dom': ^18.0.10
@@ -47,8 +50,9 @@ importers:
       react: ^18.2.0
       react-dom: ^18.2.0
       vite: ^4.1.0
-      websocket-toolkit: workspace:^1.0.0
+      websocket-toolkit: workspace:*
     dependencies:
+      '@remote-state/client-core': link:../../packages/client/core
       '@remote-state/react': link:../../packages/client/react
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0

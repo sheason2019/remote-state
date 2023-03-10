@@ -6,3 +6,7 @@ type StorePart struct {
 	*websocket_toolkit.Socket
 	stateMap map[string]any
 }
+
+func Sync[T any](sp *StorePart, atom *Atom[T]) {
+	websocket_toolkit.Send(sp.Socket, UpdateAction.Copy(atom))
+}

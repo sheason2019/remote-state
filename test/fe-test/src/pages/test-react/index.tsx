@@ -24,13 +24,9 @@ const TestPage: FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    state?.send({ type: "update", payload: { key: "test", value: val } });
-  }, [val]);
-
   return (
     <div>
-      TEST PAGE：
+      TEST REACT PAGE：
       <textarea value={val} onChange={(e) => setVal(e.target.value)} />
     </div>
   );

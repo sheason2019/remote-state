@@ -46,7 +46,7 @@ func Default() *StateStore {
 			delete(store.StoreParts, s.ID)
 		})
 
-		s.OnDispatch("update", func(payload string) {
+		s.OnDispatch(UpdateAction.Type, func(payload string) {
 			ctx := initContext(&sp, &store, payload)
 
 			ctx.start()

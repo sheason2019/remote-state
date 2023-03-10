@@ -42,3 +42,10 @@ func (atom Atom[T]) toAny() *Atom[any] {
 		Value: val,
 	}
 }
+
+func (atom Atom[T]) Copy(val T) *Atom[T] {
+	return &Atom[T]{
+		Key:   atom.Key,
+		Value: val,
+	}
+}

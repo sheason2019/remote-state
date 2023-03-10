@@ -1,4 +1,4 @@
-import { WebSocketToolkit } from ".";
+import { WebSocketToolkit } from "./ws-toolkit";
 
 export interface Action<T extends any> {
   type: string;

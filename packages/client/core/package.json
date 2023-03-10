@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@remote-state/types": "workspace:*",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.6.1",
+    "websocket-toolkit": "workspace:^1.0.0"
   },
   "keywords": [],
   "author": "",

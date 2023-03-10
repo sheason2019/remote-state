@@ -20,6 +20,12 @@ func main() {
 	})
 
 	rs.Use(remote_state.CreateAtomHandler(&testAtom, func(ctx *remote_state.Context[string]) {
+		selfId := ctx.StorePart.ID
+		for id, sp := range ctx.StateStore.StoreParts {
+			if selfId != id {
+				remote_state.Sync(sp, testAtom.Copy(ctx.Value))
+			}
+		}
 		log.Println("test atom update: ", ctx.Value)
 	}))
 

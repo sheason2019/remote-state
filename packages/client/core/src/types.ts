@@ -1,3 +1,4 @@
+import { Action } from "websocket-toolkit";
 import { RemoteAtom } from "@remote-state/types";
 
 export interface SubscribeFn<T extends RemoteAtom<any>> {
@@ -9,6 +10,10 @@ export interface SubscribeCompose<T extends RemoteAtom<any>> {
   atom: T;
 }
 
-export interface IConnectOptions {
-  // syncBehavior?: 'push' | 'pull';
-}
+export const updateAction: Action<RemoteAtom<any>> = {
+  type: "update",
+  payload: {
+    key: "",
+    value: "",
+  },
+};

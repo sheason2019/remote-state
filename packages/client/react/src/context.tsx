@@ -7,6 +7,8 @@ import {
 } from "react";
 import { RemoteStore } from "@remote-state/client-core";
 
+export { RemoteStore };
+
 export const remoteStoreContext = createContext<RemoteStore | null>(null);
 
 export const RemoteStoreProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -28,7 +30,6 @@ export const RemoteStoreProvider: FC<PropsWithChildren> = ({ children }) => {
     </remoteStoreContext.Provider>
   );
 };
-
 
 export class RemoteStoreInstance {
   static ins: RemoteStore;

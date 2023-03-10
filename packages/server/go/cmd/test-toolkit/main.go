@@ -14,7 +14,7 @@ func main() {
 		s.OnDisconnect(func(s *websocket_toolkit.Socket, code int, text string) {
 			log.Println("Socket onDisconnected. ID:", s.ID)
 		})
-		s.OnDispatch("test", func(payload string) {
+		s.OnDispatch(testAction.Type, func(payload string) {
 			log.Println("Socket dispatch. action: test. payload:", payload)
 		})
 	})

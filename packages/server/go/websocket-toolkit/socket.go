@@ -29,11 +29,6 @@ type Socket struct {
 	Message       chan []byte
 }
 
-type ActionMessage[T any] struct {
-	Type    string `json:"type"`
-	Payload T      `json:"payload"`
-}
-
 func (s *Socket) OnDisconnect(fn func(s *Socket, code int, text string)) {
 	s.disconnFn = fn
 }
