@@ -1,5 +1,5 @@
 {
-  "name": "websocket-toolkit",
+  "name": "@remote-state/websocket-toolkit",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
