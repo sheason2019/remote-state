@@ -51,6 +51,9 @@ func (ws *WebsocketStore) HandlerWS(w http.ResponseWriter, r *http.Request, resp
 
 	ws.socketMap[id] = &socket
 
+	// preset - 向客户端同步连接信息
+	Send(&socket, createPresetConnectAction(ConnectInfo{ID: id}))
+
 	// 设置onConnect
 	if ws.connFn != nil {
 		ws.connFn(&socket)

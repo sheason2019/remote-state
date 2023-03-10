@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@remote-state/react": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@remote-state/react": "workspace:*"
+    "websocket-toolkit": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

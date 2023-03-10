@@ -1,5 +1,5 @@
 {
-  "name": "@remote-state/client-core",
+  "name": "websocket-toolkit",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -9,10 +9,6 @@
     "build": "pnpm build:cjs && pnpm build:es",
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "build:es": "tsc"
-  },
-  "dependencies": {
-    "@remote-state/types": "workspace:*",
-    "socket.io-client": "^4.6.1"
   },
   "keywords": [],
   "author": "",

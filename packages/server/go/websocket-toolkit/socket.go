@@ -29,9 +29,9 @@ type Socket struct {
 	Message       chan []byte
 }
 
-type ActionMessage struct {
+type ActionMessage[T any] struct {
 	Type    string `json:"type"`
-	Payload any    `json:"payload"`
+	Payload T      `json:"payload"`
 }
 
 func (s *Socket) OnDisconnect(fn func(s *Socket, code int, text string)) {
@@ -43,6 +43,10 @@ func (s *Socket) OnDispatch(action string, reducer func(payload string)) {
 		log.Println("Dispatch被重复声明! action:", action, "这一操作会覆盖声明的Dispatch")
 	}
 	s.dispatcherMap[action] = reducer
+}
+
+func Send[T any](s *Socket, am *ActionMessage[T]) {
+	s.Conn.WriteJSON(am)
 }
 
 func (s *Socket) writePump() {
@@ -99,7 +103,7 @@ func (s *Socket) readPump() {
 			}
 			break
 		}
-		var am ActionMessage
+		var am ActionMessage[any]
 		err = json.Unmarshal(message, &am)
 		if err != nil {
 			log.Println("socket message unmarshal error:", err)

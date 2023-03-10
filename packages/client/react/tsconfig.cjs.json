@@ -4,7 +4,6 @@
     "rootDir": "src",
     "module": "CommonJS",
     "outDir": "dist",
-    "composite": true,
     "jsx": "react-jsx"
   },
   "exclude": ["dist/**/*", "esm/**/*"]

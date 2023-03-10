@@ -6,7 +6,9 @@
   "module": "esm/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --build"
+    "build": "pnpm build:cjs && pnpm build:es",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
+    "build:es": "tsc"
   },
   "keywords": [],
   "author": "",
