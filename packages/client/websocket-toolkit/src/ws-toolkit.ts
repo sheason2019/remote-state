@@ -49,7 +49,6 @@ export class WebSocketToolkit {
     this.ws.onopen = () => this.flush(this.ws, this.sendCache);
     this.ws.onmessage = (e) => {
       const action: Action<any> = JSON.parse(e.data);
-      console.log("handler map", handlerMap, "wst", wst);
       const handler = handlerMap.get(action.type);
       if (handler) {
         handler(action.payload, wst);

@@ -11,7 +11,14 @@ export { RemoteStore };
 
 export const remoteStoreContext = createContext<RemoteStore | null>(null);
 
-export const RemoteStoreProvider: FC<PropsWithChildren> = ({ children }) => {
+interface IRemoteStoreProvider {
+  url: string | URL;
+  protocols?: string | string[] | undefined;
+}
+
+export const RemoteStoreProvider: FC<
+  PropsWithChildren<IRemoteStoreProvider>
+> = ({ url, protocols, children }) => {
   const [store, setStore] = useState<RemoteStore | null>(null);
 
   // TODO: 以后使用sharedWorker创建Socket连接
@@ -20,7 +27,7 @@ export const RemoteStoreProvider: FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   const handleCreateStore = () => {
-    const s = RemoteStoreInstance.get();
+    const s = RemoteStoreInstance.get(url, protocols);
     setStore(s);
   };
 
@@ -34,16 +41,22 @@ export const RemoteStoreProvider: FC<PropsWithChildren> = ({ children }) => {
 export class RemoteStoreInstance {
   static ins: RemoteStore;
 
-  static get(): RemoteStore {
+  static get(
+    url: string | URL,
+    protocols?: string | string[] | undefined
+  ): RemoteStore {
     if (!this.ins) {
-      this.init();
+      this.init(url, protocols);
     }
 
     return this.ins;
   }
 
-  private static init() {
-    const store = new RemoteStore();
+  private static init(
+    url: string | URL,
+    protocols?: string | string[] | undefined
+  ) {
+    const store = new RemoteStore(url, protocols);
     store.connect();
 
     this.ins = store;
